@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content=" Isiaka Opeyemi|Interactive academic planner: add coursework tasks, mark them as completed and delete them.">
+  <meta name="author" content="Isiaka Opeyemi">
+  <meta name="theme-color" content="#0D2A1F">
+  <title>Academic Planner </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+
+
+  <header class="mast">
+    <div class="wrap mast__bar">
+      <span>Issue 01 &middot; October 2026</span>
+      <span>Miva Open University</span>
+      <span>COS 106 Term Project</span>
+    </div>
+    <div class="wrap mast__main">
+      <a class="logo" href="index.html" aria-label="Isiaka Opeyemi, home">Isiaka<span>.</span></a>
+      <nav class="nav" id="site-nav" aria-label="Primary">
+        <ul class="nav__list">
+          <li><a href="index.html"><small>01</small>Home</a></li>
+          <li><a href="about.html"><small>02</small>About Me</a></li>
+          <li><a href="projects.html"><small>03</small>Projects</a></li>
+          <li><a href="planner.html" class="is-active" aria-current="page"><small>04</small>Planner</a></li>
+          <li><a href="contact.html"><small>05</small>Contact</a></li>
+        </ul>
+        <p class="nav__extra">Write to <a href="mailto:l.isiaka8925@miva.edu.ng">l.isiaka8925@miva.edu.ng</a></p>
+      </nav>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true"></span><span aria-hidden="true"></span><span class="sr-only">Open menu</span>
+      </button>
+    </div>
+  </header>
+
+
+<main id="main">
+
+  <section class="page-hero" aria-labelledby="page-title">
+    <div class="wrap page-hero__grid">
+      <div>
+        <p class="kicker fade-up">04 &middot; The planner</p>
+        <h1 id="page-title"><span class="line rise"><span>Academic</span></span><span class="line rise"><span class="outline-cream">planner</span></span></h1>
+      </div>
+      <p class="deck fade-up d2">Add a task, tick it off when it is done and delete it when it no longer matters. Everything runs in JavaScript and your list is saved in this browser.</p>
+    </div>
+  </section>
+
+  <section class="section cream" aria-label="Planner">
+    <div class="wrap planner">
+
+      <aside class="compose reveal" aria-labelledby="compose-title">
+        <p class="kicker">New entry</p>
+        <h2 id="compose-title">Add a task</h2>
+        <form id="task-form" novalidate>
+          <div class="field">
+            <label for="task-title">Task</label>
+            <input type="text" id="task-title" name="task-title" placeholder="Submit COS 106 term project" autocomplete="off">
+            <p class="error" id="task-error" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="task-course">Course or area</label>
+            <input type="text" id="task-course" name="task-course" placeholder="COS 106" autocomplete="off">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="task-due">Due date</label>
+              <input type="date" id="task-due" name="task-due">
+            </div>
+            <div class="field">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" name="task-priority">
+                <option value="High">High</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn" type="submit">Add to planner <span class="arrow" aria-hidden="true">&rarr;</span></button>
+        </form>
+      </aside>
+
+      <div class="board reveal">
+        <div class="board__stats" aria-live="polite">
+          <div><b id="stat-total">0</b><span>Total</span></div>
+          <div><b id="stat-open">0</b><span>Outstanding</span></div>
+          <div><b id="stat-done">0</b><span>Completed</span></div>
+        </div>
+        <div class="progress" role="presentation"><span id="progress-bar"></span></div>
+        <p class="sr-only" id="progress-label" aria-live="polite">0% of tasks completed</p>
+
+        <div class="filters" role="group" aria-label="Filter tasks">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter" type="button" data-filter="open" aria-pressed="false">Outstanding</button>
+          <button class="filter" type="button" data-filter="done" aria-pressed="false">Completed</button>
+          <button class="filter filter--quiet" type="button" id="clear-done">Clear completed</button>
+        </div>
+
+        <ul class="task-list" id="task-list" aria-label="Tasks"></ul>
+        <div class="empty" id="task-empty" hidden>
+          <b>All clear</b>
+          <span>Nothing to show here. Add a task to get started.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="kicker">Under the hood</span><h2 id="how-title">How it<br><span class="outline-cream">works</span></h2></div>
+        <p>The planner is written in plain JavaScript in js/planner.js.</p>
+      </div>
+      <ol class="how reveal">
+        <li>Every task is an object held in one JavaScript array. The list on screen is redrawn from that array whenever it changes.</li>
+        <li>Adding, completing and deleting are separate functions, each triggered by its own event listener.</li>
+        <li>The counters, progress bar and filters all read from the same array, so they can never disagree.</li>
+        <li>After every change the array is saved to localStorage and read back when the page loads.</li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+  <footer class="foot">
+    <div class="wrap foot__top">
+      <div>
+        <p class="kicker">Get in touch</p>
+        <a class="foot__mail" href="mailto:l.isiaka8925@miva.edu.ng">l.isiaka8925@miva.edu.ng</a>
+        <p class="foot__phone">+234 810 174 8353</p>
+      </div>
+      <ul class="foot__nav" aria-label="Footer">
+        <li><a href="index.html"><small>01</small>Home</a></li>
+        <li><a href="about.html"><small>02</small>About Me</a></li>
+        <li><a href="projects.html"><small>03</small>Projects</a></li>
+        <li><a href="planner.html" class="is-active" aria-current="page"><small>04</small>Planner</a></li>
+        <li><a href="contact.html"><small>05</small>Contact</a></li>
+      </ul>
+    </div>
+    <div class="foot__word" aria-hidden="true">Swift Tech</div>
+    <div class="wrap foot__bottom">
+      <span>&copy; <span id="year">2026</span> Isiaka Opeyemi &middot; Swift Tech</span>
+      <span>COS 106 &middot; Introduction to Web Technologies</span>
+      <a href="#top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
+<script src="js/main.js"></script>
+<script src="js/planner.js"></script>
+</body>
+</html>
